@@ -170,4 +170,84 @@ export namespace br::dev::pedrolamarao::fm2gp
     {
         return power_4(sum, x, n);
     }
+
+    // Chapter 3: Ancient Greek Number Theory
+
+    template <typename T>
+    concept RandomAccessIterator = true;
+
+    template <typename T>
+    concept Integer = true;
+
+    // requires: first != last
+    template <RandomAccessIterator Iterator>
+    void mark_sieve (Iterator first, Iterator last, Integer auto factor)
+    {
+        *first = false;
+        while (last - first > factor) {
+            first = first + factor;
+            *first = false;
+        }
+    }
+
+    template <RandomAccessIterator I, Integer N>
+    void sift_0 (I first, N n)
+    {
+        std::fill_n(first, n, true);
+        N i { 0 };
+        N index_square { 3 };
+        while (index_square < n) {
+            // invariant: index_square = 2i^2 + 6i + 3
+            if (first[i]) {
+                // if candidate is prime
+                mark_sieve(first + index_square,
+                first + n, // last
+                i + i + 3); // factor
+            }
+            ++i;
+            index_square = 2*i*(i + 3) + 3;
+        }
+    }
+
+    template <RandomAccessIterator I, Integer N>
+    void sift_1 (I first, N n)
+    {
+        I last = first + n;
+        std::fill(first, last, true);
+        N i { 0 };
+        N index_square { 3 };
+        N factor { 3 };
+        while (index_square < n) {
+            // invariant: index_square = 2i^2 + 6i + 3,
+            //            factor = 2i + 3;
+            if (first[i]) {
+                mark_sieve(first + index_square, last, factor);
+            }
+            ++i;
+            factor = i + i + 3;
+            index_square = 2 * i * (i + 3) + 3;
+        }
+    }
+
+    template <RandomAccessIterator I, Integer N>
+    void sift_2 (I first, N n)
+    {
+        constexpr N two { 2 };
+        I last = first + n;
+        std::fill(first, last, true);
+        N i { 0 };
+        N index_square { 3 };
+        N factor { 3 };
+        while (index_square < n) {
+            // invariant: index_square = 2i^2 + 6i + 3,
+            //            factor = 2i + 3;
+            if (first[i]) {
+                mark_sieve(first + index_square, last, factor);
+            }
+            ++i;
+            index_square = index_square + factor;
+            factor = factor + two;
+            index_square = index_square + factor;
+        }
+    }
 }
