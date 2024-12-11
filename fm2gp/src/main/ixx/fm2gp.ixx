@@ -123,4 +123,6 @@ export namespace br::dev::pedrolamarao::fm2gp
         if (n == 1) return x;
         return multiply_accumulate_4(x, x + x, half(n - 1));
     }
+
+    // Chapter 3: Ancient Greek Number Theory
 }
