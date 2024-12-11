@@ -1,5 +1,10 @@
 // Copyright (C) 2024 Pedro Lamarão <pedro.lamarao@gmail.com>. All rights reserved.
 
+module;
+
+#include <concepts>
+#include <regex>
+
 export module br.dev.pedrolamarao.fm2gp;
 
 export namespace br::dev::pedrolamarao::fm2gp
@@ -124,5 +129,47 @@ export namespace br::dev::pedrolamarao::fm2gp
         return multiply_accumulate_4(x, x + x, half(n - 1));
     }
 
-    // Chapter 3: Ancient Greek Number Theory
+    // bonus
+
+    template <typename O>
+    concept BiOperator = requires (O o, unsigned x, unsigned y, unsigned z)
+    {
+        z = o(x,y);
+    };
+
+    // requires: n > 0
+    template <BiOperator O>
+    auto power_accumulate_4 (O o, unsigned r, unsigned x, unsigned n) -> unsigned
+    {
+        while (true) {
+            if (is_odd(n)) {
+                r = o(r,x);
+                if (n == 1) return r;
+            }
+            x = o(x,x);
+            n = half(n);
+        }
+    }
+
+    // requires: n > 0
+    template <BiOperator O>
+    auto power_4 (O o, unsigned x, unsigned n) -> unsigned
+    {
+        while (! is_odd(n)) {
+            x = o(x,x);
+            n = half(n);
+        }
+        if (n == 1) return x;
+        return power_accumulate_4(o, x, o(x,x), half(n-1));
+    }
+
+    auto sum (unsigned x, unsigned y) -> unsigned
+    {
+        return x + y;
+    }
+
+    auto multiply_power_4 (unsigned x, unsigned n) -> unsigned
+    {
+        return power_4(sum, x, n);
+    }
 }
