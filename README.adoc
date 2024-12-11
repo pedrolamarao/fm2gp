@@ -1,0 +1,4 @@
+fm2gp
+:author: Pedro Lamarão <pedro.lamarao@gmail.com>
+
+`fm2gp` contains my study of "From Mathematics to Generic Programming" by Alexander A. Stepanov and Daniel E. Rose.
