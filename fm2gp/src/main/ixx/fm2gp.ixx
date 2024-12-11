@@ -138,8 +138,7 @@ export namespace br::dev::pedrolamarao::fm2gp
     };
 
     // requires: n > 0
-    template <BiOperator O>
-    auto power_accumulate_4 (O o, unsigned r, unsigned x, unsigned n) -> unsigned
+    auto power_accumulate_4 (BiOperator auto o, unsigned r, unsigned x, unsigned n) -> unsigned
     {
         while (true) {
             if (is_odd(n)) {
@@ -152,8 +151,7 @@ export namespace br::dev::pedrolamarao::fm2gp
     }
 
     // requires: n > 0
-    template <BiOperator O>
-    auto power_4 (O o, unsigned x, unsigned n) -> unsigned
+    auto power_4 (BiOperator auto o, unsigned x, unsigned n) -> unsigned
     {
         while (! is_odd(n)) {
             x = o(x,x);
