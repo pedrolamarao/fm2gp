@@ -28,12 +28,14 @@ export namespace br::dev::pedrolamarao::fm2gp
         return x << 1;
     }
 
+    // requires: n > 0
     auto multiply_0 (unsigned x, unsigned n) -> unsigned
     {
         if (n == 1) return x;
         else return x + multiply_0( x, n - 1 );
     }
 
+    // requires: n > 0
     auto multiply_1 (unsigned x, unsigned n) -> unsigned
     {
         if (n == 1) return x;
@@ -42,6 +44,7 @@ export namespace br::dev::pedrolamarao::fm2gp
         return r;
     }
 
+    // requires: n > 0
     auto multiply_accumulate_0 (unsigned r, unsigned x, unsigned n) -> unsigned
     {
         if (n == 1)           return r + x;
@@ -49,6 +52,7 @@ export namespace br::dev::pedrolamarao::fm2gp
         else /* is_even(n) */ return multiply_accumulate_0( r, x + x, half(n) );
     }
 
+    // requires: n > 0
     auto multiply_accumulate_1 (unsigned r, unsigned x, unsigned n) -> unsigned
     {
         if (n == 1) return r + x;
@@ -56,6 +60,7 @@ export namespace br::dev::pedrolamarao::fm2gp
         return multiply_accumulate_1( r, x + x, half(n) );
     }
 
+    // requires: n > 0
     auto multiply_accumulate_2 (unsigned r, unsigned x, unsigned n) -> unsigned
     {
         if (is_odd(n)) {
@@ -65,6 +70,7 @@ export namespace br::dev::pedrolamarao::fm2gp
         return multiply_accumulate_2( r, x + x, half(n) );
     }
 
+    // requires: n > 0
     auto multiply_accumulate_3 (unsigned r, unsigned x, unsigned n) -> unsigned
     {
         if (is_odd(n)) {
@@ -76,6 +82,7 @@ export namespace br::dev::pedrolamarao::fm2gp
         return multiply_accumulate_2( r, x, n );
     }
 
+    // requires: n > 0
     auto multiply_accumulate_4 (unsigned r, unsigned x, unsigned n) -> unsigned
     {
         while (true) {
@@ -88,12 +95,14 @@ export namespace br::dev::pedrolamarao::fm2gp
         }
     }
 
+    // requires: n > 0
     auto multiply_2 (unsigned x, unsigned n) -> unsigned
     {
         if (n == 1) return x;
         return multiply_accumulate_4(x, x, n - 1);
     }
 
+    // requires: n > 0
     auto multiply_3 (unsigned x, unsigned n) -> unsigned
     {
         while (! is_odd(n)) {
@@ -104,6 +113,7 @@ export namespace br::dev::pedrolamarao::fm2gp
         return multiply_accumulate_4(x, x, n - 1);
     }
 
+    // requires: n > 0
     auto multiply_4 (unsigned x, unsigned n) -> unsigned
     {
         while (! is_odd(n)) {
