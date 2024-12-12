@@ -411,4 +411,14 @@ export namespace br::dev::pedrolamarao::fm2gp
         }
         return {q,x};
     }
+
+    // requires: y > 0
+    auto gcm_4 (unsigned x, unsigned y) -> unsigned
+    {
+        while (not_equal(y,0)) {
+            x = remainder_3(x,y);
+            std::swap(x,y);
+        }
+        return x;
+    }
 }
