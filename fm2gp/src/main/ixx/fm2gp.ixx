@@ -2,17 +2,12 @@
 
 module;
 
-#include <concepts>
-#include <regex>
+#include <algorithm>
 
 export module br.dev.pedrolamarao.fm2gp;
 
 export namespace br::dev::pedrolamarao::fm2gp
 {
-    // From Mathematics to Generic Programming
-
-    // Chapter 2: The First Algorithm
-
     auto is_even (unsigned x) -> bool
     {
         return (x & 1) == 0;
@@ -21,6 +16,41 @@ export namespace br::dev::pedrolamarao::fm2gp
     auto is_odd (unsigned x) -> bool
     {
         return (x & 1) == 1;
+    }
+
+    auto is_equal (unsigned x, unsigned y) -> bool
+    {
+        return x == y;
+    }
+
+    auto not_equal (unsigned x, unsigned y) -> bool
+    {
+        return x != y;
+    }
+
+    auto is_less (unsigned x, unsigned y) -> bool
+    {
+        return x < y;
+    }
+
+    auto not_less (unsigned x, unsigned y) -> bool
+    {
+        return x >= y;
+    }
+
+    auto not_greater (unsigned x, unsigned y) -> bool
+    {
+        return x <= y;
+    }
+
+    auto sum (unsigned x, unsigned y) -> unsigned
+    {
+        return x + y;
+    }
+
+    auto difference (unsigned x, unsigned y) -> unsigned
+    {
+        return x - y;
     }
 
     auto half (unsigned x) -> unsigned
@@ -32,6 +62,8 @@ export namespace br::dev::pedrolamarao::fm2gp
     {
         return x << 1;
     }
+
+    // Chapter 2: The First Algorithm
 
     // requires: n > 0
     auto multiply_0 (unsigned x, unsigned n) -> unsigned
@@ -161,11 +193,6 @@ export namespace br::dev::pedrolamarao::fm2gp
         return power_accumulate_4(o, x, o(x,x), half(n-1));
     }
 
-    auto sum (unsigned x, unsigned y) -> unsigned
-    {
-        return x + y;
-    }
-
     auto multiply_power_4 (unsigned x, unsigned n) -> unsigned
     {
         return power_4(sum, x, n);
@@ -249,5 +276,139 @@ export namespace br::dev::pedrolamarao::fm2gp
             factor = factor + two;
             index_square = index_square + factor;
         }
+    }
+
+    // requires: x > 0, y > 0
+    auto gcm (unsigned x, unsigned y) -> unsigned
+    {
+        if (is_equal(x,y))     return x;
+        else if (is_less(x,y)) return gcm(x,difference(y,x));
+        else                   return gcm(difference(x,y), y);
+    }
+
+    // Chapter 4: Euclid's Algorithm
+
+    // requires: x > 0, y > 0
+    auto gcm_0 (unsigned x, unsigned y) -> unsigned
+    {
+        while (not_equal(x,y)) {
+            if (is_less(x,y)) y = difference(y,x);
+            else              x = difference(x,y);
+        }
+        return x;
+    }
+
+    // requires: x > 0, y > 0
+    auto gcm_1 (unsigned x, unsigned y) -> unsigned
+    {
+        while (not_equal(x,y)) {
+            while (is_less(y,x)) x = difference(x,y);
+            std::swap(x,y);
+        }
+        return x;
+    }
+
+    // requires: x > 0, y > 0
+    auto remainder_0 (unsigned x, unsigned y) -> unsigned
+    {
+        while (is_less(y,x)) x = difference(x,y);
+        return x;
+    }
+
+    // requires: x > 0, y > 0
+    auto gcm_2 (unsigned x, unsigned y) -> unsigned
+    {
+        while (not_equal(x,y)) {
+            x = remainder_0(x,y);
+            std::swap(x,y);
+        }
+        return x;
+    }
+
+    // requires: x > 0, y > 0
+    auto remainder_1 (unsigned x, unsigned y) -> unsigned
+    {
+        if (not_greater(x,y)) return x;
+        if (not_greater(difference(x,y),y)) return difference(x,y);
+        x = remainder_1(x,twice(y));
+        if (not_greater(x,y)) return x;
+        return x - y;
+    }
+
+    // requires: x > 0, y > 0
+    auto gcm_3 (unsigned x, unsigned y) -> unsigned
+    {
+        while (not_equal(x,y)) {
+            x = remainder_1(x,y);
+            std::swap(x,y);
+        }
+        return x;
+    }
+
+    // requires: y > 0
+    auto remainder_2 (unsigned x, unsigned y) -> unsigned
+    {
+        if (is_less(x,y)) return x;
+        if (is_less(difference(x,y),y)) return difference(x,y);
+        x = remainder_1(x,twice(y));
+        if (is_less(x,y)) return x;
+        return difference(x,y);
+    }
+
+    // requires: y > 0
+    auto largest_doubling (unsigned x, unsigned y) -> unsigned
+    {
+        while (not_less(difference(x,y),y)) y = twice(y);
+        return y;
+    }
+
+    // requires: y > 0
+    auto remainder_3 (unsigned x, unsigned y) -> unsigned
+    {
+        if (is_less(x,y)) return x;
+        auto z = largest_doubling(x,y);
+        x = difference(x,z);
+        while (not_equal(z,y)) {
+            z = half(z);
+            if (not_greater(z,x)) x = difference(x,z);
+        }
+        return x;
+    }
+
+    // requires: y > 0
+    auto quotient_3 (unsigned x, unsigned y) -> unsigned
+    {
+        if (is_less(x,y)) return 0;
+        auto z = largest_doubling(x,y);
+        auto q = 1u;
+        x = difference(x,z);
+        while (not_equal(z,y)) {
+            z = half(z);
+            q = twice(q);
+            if (not_greater(z,x)) {
+                x = difference(x,z);
+                q = sum(q,1);
+            }
+        }
+        return q;
+    }
+
+    // requires: y > 0
+    // returns: (quotient,remainder)
+    auto divide_3 (unsigned x, unsigned y) -> std::pair<unsigned,unsigned>
+    {
+        if (is_less(x,y)) return {0,x};
+        auto z = largest_doubling(x,y);
+        auto q = 1u;
+        x = difference(x,z);
+        while (not_equal(z,y)) {
+            z = half(z);
+            q = twice(q);
+            if (not_greater(z,x)) {
+                x = difference(x,z);
+                q = sum(q,1);
+            }
+        }
+        return {q,x};
     }
 }
