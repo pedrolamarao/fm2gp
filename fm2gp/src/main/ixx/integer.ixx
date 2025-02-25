@@ -37,6 +37,13 @@ export namespace br::dev::pedrolamarao::number
 
     template <typename Set>
     requires std::integral<Set>
+    auto quotient (Set x, Set y) -> Set
+    {
+        return x / y;
+    }
+
+    template <typename Set>
+    requires std::integral<Set>
     auto remainder (Set x, Set y) -> Set
     {
         return x % y;
