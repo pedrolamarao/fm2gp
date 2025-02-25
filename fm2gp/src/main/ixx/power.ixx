@@ -1,27 +1,9 @@
-module;
-
-#include <concepts>
-
 export module br.dev.pedrolamarao.number.power;
+
+import br.dev.pedrolamarao.number.integer;
 
 export namespace br::dev::pedrolamarao::number
 {
-    // IntegerLike
-
-    template <typename Integer>
-    auto is_odd (Integer x) -> bool;
-
-    template <typename Integer>
-    auto half (Integer x) -> Integer;
-
-    template <typename N>
-    concept IntegerLike = requires (N n, bool b)
-    {
-        std::integral<N>;
-        { b = is_odd(n) };
-        { n = half(n) };
-    };
-
     // Operator
 
     template <typename Operator, typename Set>
