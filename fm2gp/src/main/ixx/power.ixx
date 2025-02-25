@@ -38,16 +38,16 @@ export namespace br::dev::pedrolamarao::number
 
     // power
 
-    template <typename Set, SemigroupOperator<Set> Operator, Integer Integer>
+    template <typename Set, SemigroupOperator<Set> Operator, Integer I>
     // requires { n >= Integer(0) }
-    auto power_accumulate_semigroup (Operator o, Set a, Set x, Integer n) -> Set
+    auto power_accumulate_semigroup (Operator o, Set a, Set x, I n) -> Set
     {
-        if (n == Integer(0))
+        if (n == I{0})
             return a;
         while (true) {
             if (is_odd(n)) {
                 a = o(a,x);
-                if (n == Integer(1))
+                if (n == I(1))
                     return a;
             }
             n = half(n);
@@ -55,32 +55,32 @@ export namespace br::dev::pedrolamarao::number
         }
     }
 
-    template <typename Set, SemigroupOperator<Set> Operator, Integer Integer>
+    template <typename Set, SemigroupOperator<Set> Operator, Integer I>
     // requires { n > Integer(0) }
-    auto power_semigroup (Operator o, Set x, Integer n) -> Set
+    auto power_semigroup (Operator o, Set x, I n) -> Set
     {
         while (! is_odd(n)) {
             x = o(x,x);
             n = half(n);
         }
-        if (n == Integer(1))
+        if (n == I{1})
             return x;
-        return power_accumulate_semigroup(o,x,o(x,x),half(n-Integer(1)));
+        return power_accumulate_semigroup(o,x,o(x,x),half(n-I{1}));
     }
 
-    template <typename Set, MonoidOperator<Set> Operator, Integer Integer>
+    template <typename Set, MonoidOperator<Set> Operator, Integer I>
     // requires { n >= Integer(0) }
-    auto power_monoid (Operator o, Set x, Integer n) -> Set
+    auto power_monoid (Operator o, Set x, I n) -> Set
     {
-        if (n == Integer(0))
+        if (n == I{0})
             return identity<Operator,Set>;
         return power_semigroup(o,x,n);
     }
 
-    template <typename Set, GroupOperator<Set> Operator, Integer Integer>
-    auto power_group (Operator o, Set x, Integer n) -> Set
+    template <typename Set, GroupOperator<Set> Operator, Integer I>
+    auto power_group (Operator o, Set x, I n) -> Set
     {
-        if (n < Integer(0)) {
+        if (n < I{0}) {
             n = -n;
             x = inverse<Operator,Set>(x);
         }

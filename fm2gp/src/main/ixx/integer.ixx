@@ -67,6 +67,7 @@ export namespace br::dev::pedrolamarao::number
     concept Integer = requires (Set x, bool b)
     {
         std::regular<Set>;
+        { x = Set{0} };
         { b = is_even(x) };
         { b = is_odd(x) };
         { x = sum(x,x) };

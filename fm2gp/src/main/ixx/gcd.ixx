@@ -11,11 +11,11 @@ export namespace br::dev::pedrolamarao::number
 {
     // gcd
 
-    template <typename Set>
-    auto gcd (Set x, Set y) -> Set
+    template <Integer I>
+    auto gcd (I x, I y) -> I
     {
         using std::swap;
-        while (y != Set(0)) {
+        while (y != I{0}) {
             x = remainder(x,y);
             swap(x,y);
         }
