@@ -3,12 +3,29 @@
   "configurePresets": [
     {
       "name": "default",
-      "binaryDir": "build",
       "generator": "Ninja",
+      "hidden": true,
       "cacheVariables": {
         "CMAKE_C_COMPILER": "clang",
         "CMAKE_CXX_COMPILER": "clang++",
         "CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "conan_provider.cmake"
+      }
+    },
+    {
+      "name": "debug",
+      "inherits": "default",
+      "binaryDir": "build-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "release",
+      "inherits": "default",
+      "binaryDir": "build-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INTERPROCEDURAL_OPTIMIZATION": "True"
       }
     }
   ]
