@@ -3,7 +3,7 @@
 import br.dev.pedrolamarao.number.integer;
 import br.dev.pedrolamarao.number.power;
 
-namespace br::dev::pedrolamarao::number
+namespace
 {
     struct sum_
     {
@@ -23,6 +23,25 @@ namespace br::dev::pedrolamarao::number
         auto operator() (double x) const noexcept { return -x; }
     };
 
+    struct product_
+    {
+        auto operator() (uint32_t x, uint32_t y) const noexcept { return x * y; }
+        auto operator() (uint64_t x, uint64_t y) const noexcept { return x * y; }
+        auto operator() (int32_t x, int32_t y) const noexcept { return x * y; }
+        auto operator() (int64_t x, int64_t y) const noexcept { return x * y; }
+        auto operator() (float x, float y) const noexcept { return x * y; }
+        auto operator() (double x, double y) const noexcept { return x * y; }
+    };
+
+    struct product_inverse_
+    {
+        auto operator() (float x) const noexcept { return float{1} / x; }
+        auto operator() (double x) const noexcept { return double{1} / x; }
+    };
+}
+
+namespace br::dev::pedrolamarao::number
+{
     template <>
     struct identity_type <sum_,uint32_t> { static constexpr uint32_t value = 0; };
 
@@ -52,22 +71,6 @@ namespace br::dev::pedrolamarao::number
 
     template <>
     struct inverse_type <sum_,double> { using type = sum_inverse_; };
-
-    struct product_
-    {
-        auto operator() (uint32_t x, uint32_t y) const noexcept { return x * y; }
-        auto operator() (uint64_t x, uint64_t y) const noexcept { return x * y; }
-        auto operator() (int32_t x, int32_t y) const noexcept { return x * y; }
-        auto operator() (int64_t x, int64_t y) const noexcept { return x * y; }
-        auto operator() (float x, float y) const noexcept { return x * y; }
-        auto operator() (double x, double y) const noexcept { return x * y; }
-    };
-
-    struct product_inverse_
-    {
-        auto operator() (float x) const noexcept { return float{1} / x; }
-        auto operator() (double x) const noexcept { return double{1} / x; }
-    };
 
     template <>
     struct identity_type <product_,uint32_t> { static constexpr uint32_t value = 1; };
