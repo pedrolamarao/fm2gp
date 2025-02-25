@@ -64,7 +64,7 @@ export namespace br::dev::pedrolamarao::number
     }
 
     template <typename Set>
-    concept IntegerLike = requires (Set x, bool b)
+    concept Integer = requires (Set x, bool b)
     {
         std::regular<Set>;
         { b = is_even(x) };

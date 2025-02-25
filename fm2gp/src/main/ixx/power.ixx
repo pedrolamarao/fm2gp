@@ -38,7 +38,7 @@ export namespace br::dev::pedrolamarao::number
 
     // power
 
-    template <typename Set, SemigroupOperator<Set> Operator, IntegerLike Integer>
+    template <typename Set, SemigroupOperator<Set> Operator, Integer Integer>
     // requires { n >= Integer(0) }
     auto power_accumulate_semigroup (Operator o, Set a, Set x, Integer n) -> Set
     {
@@ -55,7 +55,7 @@ export namespace br::dev::pedrolamarao::number
         }
     }
 
-    template <typename Set, SemigroupOperator<Set> Operator, IntegerLike Integer>
+    template <typename Set, SemigroupOperator<Set> Operator, Integer Integer>
     // requires { n > Integer(0) }
     auto power_semigroup (Operator o, Set x, Integer n) -> Set
     {
@@ -68,7 +68,7 @@ export namespace br::dev::pedrolamarao::number
         return power_accumulate_semigroup(o,x,o(x,x),half(n-Integer(1)));
     }
 
-    template <typename Set, MonoidOperator<Set> Operator, IntegerLike Integer>
+    template <typename Set, MonoidOperator<Set> Operator, Integer Integer>
     // requires { n >= Integer(0) }
     auto power_monoid (Operator o, Set x, Integer n) -> Set
     {
@@ -77,7 +77,7 @@ export namespace br::dev::pedrolamarao::number
         return power_semigroup(o,x,n);
     }
 
-    template <typename Set, GroupOperator<Set> Operator, IntegerLike Integer>
+    template <typename Set, GroupOperator<Set> Operator, Integer Integer>
     auto power_group (Operator o, Set x, Integer n) -> Set
     {
         if (n < Integer(0)) {

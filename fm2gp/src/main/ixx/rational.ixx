@@ -12,7 +12,7 @@ using namespace std;
 
 export namespace br::dev::pedrolamarao::number
 {
-    template <IntegerLike Set>
+    template <Integer Set>
     struct rational
     {
         Set numerator;
@@ -54,7 +54,7 @@ export namespace br::dev::pedrolamarao::number
         }
     };
 
-    template <IntegerLike Set>
+    template <Integer Set>
     constexpr
     auto sum (rational<Set> x, rational<Set> y) -> rational<Set>
     {
@@ -65,7 +65,7 @@ export namespace br::dev::pedrolamarao::number
         return rational<Set>::reduce(n,d);
     }
 
-    template <IntegerLike Set>
+    template <Integer Set>
     constexpr
     auto difference (rational<Set> x, rational<Set> y) -> rational<Set>
     {
@@ -76,7 +76,7 @@ export namespace br::dev::pedrolamarao::number
         return rational<Set>::reduce(n,d);
     }
 
-    template <IntegerLike Set>
+    template <Integer Set>
     constexpr
     auto product (rational<Set> x, rational<Set> y) -> rational<Set>
     {
@@ -85,7 +85,7 @@ export namespace br::dev::pedrolamarao::number
         return rational<Set>::reduce(n,d);
     }
 
-    template <IntegerLike Set>
+    template <Integer Set>
     constexpr
     auto quotient (rational<Set> x, rational<Set> y) -> rational<Set>
     {
@@ -94,7 +94,7 @@ export namespace br::dev::pedrolamarao::number
         return rational<Set>::reduce(n,d);
     }
 
-    template <IntegerLike Set>
+    template <Integer Set>
     constexpr
     auto half (rational<Set> x) -> rational<Set>
     {
@@ -103,7 +103,7 @@ export namespace br::dev::pedrolamarao::number
             rational( x.numerator, twice(x.denominator) );
     }
 
-    template <IntegerLike Set>
+    template <Integer Set>
     constexpr
     auto twice (rational<Set> x) -> rational<Set>
     {
