@@ -50,6 +50,13 @@ export namespace br::dev::pedrolamarao::number
     }
 
     template <typename Set>
+    requires std::integral<Set>
+    auto twice (Set x) -> Set
+    {
+        return x << 1;
+    }
+
+    template <typename Set>
     concept IntegerLike = requires (Set x, bool b)
     {
         std::regular<Set>;
@@ -59,5 +66,6 @@ export namespace br::dev::pedrolamarao::number
         { x = product(x,x) };
         { x = remainder(x,x) };
         { x = half(x) };
+        { x = twice(x) };
     };
 }
