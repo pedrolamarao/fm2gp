@@ -7,6 +7,8 @@ export module br.dev.pedrolamarao.number.integer;
 
 export namespace br::dev::pedrolamarao::number
 {
+    // properties
+
     template <typename Set>
     requires std::integral<Set>
     auto is_even (Set x) -> bool
@@ -21,11 +23,29 @@ export namespace br::dev::pedrolamarao::number
         return (x & 1) == 1;
     }
 
+    // relations
+
+    template <typename Set>
+    requires std::integral<Set>
+    auto is_equal (Set x, Set y) -> bool
+    {
+        return x == y;
+    }
+
+    // operations
+
     template <typename Set>
     requires std::integral<Set>
     auto sum (Set x, Set y) -> Set
     {
         return x + y;
+    }
+
+    template <typename Set>
+    requires std::integral<Set>
+    auto difference (Set x, Set y) -> Set
+    {
+        return x - y;
     }
 
     template <typename Set>
@@ -67,7 +87,7 @@ export namespace br::dev::pedrolamarao::number
     concept Integer = requires (Set x, bool b)
     {
         std::regular<Set>;
-        { x = Set{0} };
+        std::constructible_from<Set,decltype(0)>;
         { b = is_even(x) };
         { b = is_odd(x) };
         { x = sum(x,x) };
