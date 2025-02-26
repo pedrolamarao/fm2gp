@@ -69,11 +69,13 @@ export namespace br::dev::pedrolamarao::number
         }
         if (n == I{1})
             return x;
+        auto xx = o(x,x);
+        auto nn = half(n-I{1});
         return power_accumulate_semigroup(
             std::forward<Operator>(o),
             std::forward<Set>(x),
-            o(x,x),
-            half(n-I{1})
+            std::forward<Set>(xx),
+            std::forward<I>(nn)
         );
     }
 
