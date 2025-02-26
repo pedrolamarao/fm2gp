@@ -1,3 +1,7 @@
+module;
+
+#include <utility>
+
 export module br.dev.pedrolamarao.number.power;
 
 import br.dev.pedrolamarao.number.integer;
@@ -40,7 +44,7 @@ export namespace br::dev::pedrolamarao::number
 
     template <typename Set, SemigroupOperator<Set> Operator, Integer I>
     // requires { n >= Integer(0) }
-    auto power_accumulate_semigroup (Operator o, Set a, Set x, I n) -> Set
+    auto power_accumulate_semigroup (Operator && o, Set && a, Set && x, I && n) -> Set
     {
         if (n == I{0})
             return a;
@@ -57,7 +61,7 @@ export namespace br::dev::pedrolamarao::number
 
     template <typename Set, SemigroupOperator<Set> Operator, Integer I>
     // requires { n > Integer(0) }
-    auto power_semigroup (Operator o, Set x, I n) -> Set
+    auto power_semigroup (Operator && o, Set && x, I && n) -> Set
     {
         while (! is_odd(n)) {
             x = o(x,x);
@@ -65,25 +69,38 @@ export namespace br::dev::pedrolamarao::number
         }
         if (n == I{1})
             return x;
-        return power_accumulate_semigroup(o,x,o(x,x),half(n-I{1}));
+        return power_accumulate_semigroup(
+            std::forward<Operator>(o),
+            std::forward<Set>(x),
+            o(x,x),
+            half(n-I{1})
+        );
     }
 
     template <typename Set, MonoidOperator<Set> Operator, Integer I>
     // requires { n >= Integer(0) }
-    auto power_monoid (Operator o, Set x, I n) -> Set
+    auto power_monoid (Operator && o, Set && x, I && n) -> Set
     {
         if (n == I{0})
             return identity<Operator,Set>;
-        return power_semigroup(o,x,n);
+        return power_semigroup(
+            std::forward<Operator>(o),
+            std::forward<Set>(x),
+            std::forward<I>(n)
+        );
     }
 
     template <typename Set, GroupOperator<Set> Operator, Integer I>
-    auto power_group (Operator o, Set x, I n) -> Set
+    auto power_group (Operator && o, Set && x, I && n) -> Set
     {
         if (n < I{0}) {
             n = -n;
-            x = inverse<Operator,Set>(x);
+            x = inverse<Operator,Set>(std::forward<Set>(x));
         }
-        return power_monoid(o,x,n);
+        return power_monoid(
+            std::forward<Operator>(o),
+            std::forward<Set>(x),
+            std::forward<I>(n)
+        );
     }
 }
