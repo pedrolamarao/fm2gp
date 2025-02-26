@@ -46,12 +46,14 @@ export namespace br::dev::pedrolamarao::number
     // requires { n >= Integer(0) }
     auto power_accumulate_semigroup (Operator && o, Set && a, Set && x, I && n) -> Set
     {
-        if (n == I{0})
+        typename std::remove_reference<I>::type const zero { 0 };
+        typename std::remove_reference<I>::type const one { 1 };
+        if (is_equal(n,zero))
             return a;
         while (true) {
             if (is_odd(n)) {
                 a = o(a,x);
-                if (n == I(1))
+                if (is_equal(n,one))
                     return a;
             }
             n = half(n);
@@ -63,14 +65,15 @@ export namespace br::dev::pedrolamarao::number
     // requires { n > Integer(0) }
     auto power_semigroup (Operator && o, Set && x, I && n) -> Set
     {
-        while (! is_odd(n)) {
+        typename std::remove_reference<I>::type const one { 1 };
+        while (is_even(n)) {
             x = o(x,x);
             n = half(n);
         }
-        if (n == I{1})
+        if (is_equal(n,one))
             return x;
         auto xx = o(x,x);
-        auto nn = half(n-I{1});
+        auto nn = half( difference(n,one) );
         return power_accumulate_semigroup(
             std::forward<Operator>(o),
             std::forward<Set>(x),
@@ -83,7 +86,8 @@ export namespace br::dev::pedrolamarao::number
     // requires { n >= Integer(0) }
     auto power_monoid (Operator && o, Set && x, I && n) -> Set
     {
-        if (n == I{0})
+        typename std::remove_reference<I>::type const zero { 0 };
+        if (is_equal(n,zero))
             return identity<Operator,Set>;
         return power_semigroup(
             std::forward<Operator>(o),
@@ -95,7 +99,8 @@ export namespace br::dev::pedrolamarao::number
     template <typename Set, GroupOperator<Set> Operator, Integer I>
     auto power_group (Operator && o, Set && x, I && n) -> Set
     {
-        if (n < I{0}) {
+        typename std::remove_reference<I>::type const zero { 0 };
+        if (is_less(n,zero)) {
             n = -n;
             x = inverse<Operator,Set>(std::forward<Set>(x));
         }
